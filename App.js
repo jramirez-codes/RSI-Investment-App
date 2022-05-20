@@ -1,14 +1,16 @@
 import React from 'react';
 import { Title } from 'react-native-paper';
-import {View} from 'react-native';
+import {View, ScrollView} from 'react-native';
 import StockSearch from './components/rsiStockSearch';
 
 function App() {
   return(
     <>
     <View>
-      <Title style={{textAlign: 'center'}}>RSI App</Title>
-      <StockSearch></StockSearch>
+      <ScrollView>
+        <Title style={{textAlign: 'center'}}>RSI App</Title>
+        <StockSearch></StockSearch>
+      </ScrollView>
     </View>
     </>
   );

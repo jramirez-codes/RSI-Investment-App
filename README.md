@@ -6,8 +6,8 @@ This application is an investment app that utilizes the relative strength index.
 * Display RSI data for specific stock
 
 ## Limitations
-* Alpha Vantage limits API calls to 5 / per min
-    * API Call: Search text length is 5 characters or 8 characters
+* Alpha Vantage limits API calls to 5 / per min.
+    * API Call: Search stock by name where the text length is 7 characters
     * API Call: Getting specific stock data 
 
 ## Requirements

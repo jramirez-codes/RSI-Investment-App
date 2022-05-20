@@ -64,7 +64,6 @@ async function onPress(stock) {
   }
   console.log("Getting Data for " + stock);
   var data = await getData(stock);
-  console.log(data);
   return data;
 }
 
@@ -106,9 +105,10 @@ async function augmentDataSearch(data) {
 }
 
 function StockSearch() {
+  // States
   const [inputStock, setInputStock] = useState("");
   const [stockSearch, setStockSearch] = useState(null)
-  const [chartData, setChartData] = useState(null);
+  const [chartData, setChartData] = useState([]);
 
   // When text is inputed into textInput
   const onTextSearch = async(searchText) => {
@@ -116,7 +116,7 @@ function StockSearch() {
     setInputStock(searchText);
     
     // Check if length is greater than 3 character
-    if(searchText.length === 5 || searchText.length === 8) {
+    if(searchText.length === 7) {
       var searchData = await onTextInput(searchText)
       searchData = await augmentDataSearch(searchData["bestMatches"])
       console.log(searchData)
@@ -139,13 +139,13 @@ function StockSearch() {
       rsiData = await onPress(inputStock)
     } 
 
+    // Catches if reaquest is a not a valid
     if(Object.keys(rsiData).length === 0) {
       return
     }
     // Transform data into useable form
     rsiData = await augmentDataRSI(rsiData)
-    console.log(rsiData)
-    await setChartData({
+    chartData.push({
       labels: rsiData[0],
       datasets: [
         { 
@@ -156,14 +156,17 @@ function StockSearch() {
       ],
       legend: [rsiData[2][0]]
     })
+    setChartData(chartData)
   }
 
   // Display Search Data for the user
   const DisplaySearchData = (props) => {
+    // If there is no data
     if(props.data === null) {
       return(<View>{null}</View>);
     }
-  
+    
+    // Update data
     var data = props.data
     var key = 0;
     const searchedData = data.map((stock) =>(
@@ -179,6 +182,23 @@ function StockSearch() {
     );
   }
 
+  const DisplayMultipleGraphs = (props) => {
+    var data = props.data
+    var key = 0
+    // If there is no chart data
+    if(data.length === 0) {
+      return (<View>{null}</View>)
+    }
+    
+    const allChartData = data.map((chartData) => (
+      <View key={key++} style={[{marginBottom: 10, borderRadius: 30, backgroundColor: "black", width:"90%", alignSelf:"center"}]}>
+        <LineChart data={chartData} width={screenWidth*0.9} height={250} chartConfig={chartConfig}  verticalLabelRotation={15} bezier/>
+      </View>
+    ));
+
+    return allChartData;
+  }
+
   return(
     <>
     <View style={[{justifyContent:'space-between', marginBottom: 10}]}>
@@ -190,9 +210,7 @@ function StockSearch() {
         Get RSI
       </Button>
     </View>
-    <View style={[{marginBottom: 10, borderRadius: 30, backgroundColor: "black", width:"90%", alignSelf:"center"}]}>
-      {chartData === null ? (null): (<LineChart data={chartData} width={screenWidth*0.9} height={250} chartConfig={chartConfig}  verticalLabelRotation={15} bezier/>)}
-    </View>
+    <DisplayMultipleGraphs data={chartData}/>
     </>
   );
 }
