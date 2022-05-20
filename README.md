@@ -5,6 +5,9 @@ This application is an investment app that utilizes the relative strength index.
 * Search for stock by name or TINKER
 * Display RSI data for specific stock
 
+## Drawbacks
+* Alpha Vantage limits API calls to 5 / per min
+
 ## Requirements
 ```javascript
 {"dependencies": {
@@ -28,9 +31,6 @@ This application is an investment app that utilizes the relative strength index.
     "jest": "^26.6.3",
     "metro-react-native-babel-preset": "^0.67.0",
     "react-test-renderer": "17.0.2"
-  },
-  "jest": {
-    "preset": "react-native"
   }
 }
 ```
