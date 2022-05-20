@@ -1,6 +1,10 @@
 # RSI-Investment-App
 This application is an investment app that utilizes the relative strength index. This project was created in react native using javascript. In addition, the project pulls stock data from the Alpha Vantage API.
 
+## Features
+* Search for stock by name or TINKER
+* Display RSI data for specific stock
+
 ## Requirements
 ```javascript
 {"dependencies": {
