@@ -7,6 +7,8 @@ This application is an investment app that utilizes the relative strength index.
 
 ## Drawbacks
 * Alpha Vantage limits API calls to 5 / per min
+    * API Call: Search text length is 5 characters or 8 characters
+    * API Call: Getting specific stock data 
 
 ## Requirements
 ```javascript
