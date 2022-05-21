@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import { Button, TextInput } from 'react-native-paper';
-import {Dimensions, View} from 'react-native';
+import {Dimensions, View, ScrollView} from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
 
 const screenWidth = Dimensions.get("window").width;
@@ -201,16 +201,20 @@ function StockSearch() {
 
   return(
     <>
-    <View style={[{justifyContent:'space-between', marginBottom: 10}]}>
-      <TextInput label="TINKER Stock" value={inputStock} onChangeText={inputStock => onTextSearch(inputStock)} />
+    <View>
+      <ScrollView>
+        <View style={[{justifyContent:'space-between', marginBottom: 10}]}>
+          <TextInput label="TINKER Stock" value={inputStock} onChangeText={inputStock => onTextSearch(inputStock)} />
+        </View>
+        <DisplaySearchData data={stockSearch}/>
+        <View style={[{justifyContent:'space-between', marginBottom: 10}]}>
+          <Button style={[{ width: "60%", alignSelf:"center"}]} mode="contained" onPress={() => onButtonPress(null)}>
+            Get RSI
+          </Button>
+        </View>
+        <DisplayMultipleGraphs data={chartData}/>
+      </ScrollView>
     </View>
-    <DisplaySearchData data={stockSearch}/>
-    <View style={[{justifyContent:'space-between', marginBottom: 10}]}>
-      <Button style={[{ width: "60%", alignSelf:"center"}]} mode="contained" onPress={() => onButtonPress(null)}>
-        Get RSI
-      </Button>
-    </View>
-    <DisplayMultipleGraphs data={chartData}/>
     </>
   );
 }
