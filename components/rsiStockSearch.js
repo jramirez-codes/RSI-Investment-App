@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import { Button, TextInput } from 'react-native-paper';
 import {Dimensions, View, ScrollView} from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -67,6 +68,7 @@ async function onPress(stock) {
   return data;
 }
 
+// Configure RSI data
 async function augmentDataRSI(data) {
   // Variables
   var metaJson = data["Meta Data"];
@@ -95,6 +97,7 @@ async function augmentDataRSI(data) {
   return [rsiLabels, rsiData, metaData]
 }
 
+// Configure Search Data
 async function augmentDataSearch(data) {
   var searchData = []
   for(var x = 0; x < data.length; x++) {
@@ -102,6 +105,61 @@ async function augmentDataSearch(data) {
   }
   // Return array of tuples with symbol and name
   return searchData.slice(0,3);
+}
+
+async function onSaveData(data) {
+  // try {
+  //   await AsyncStorage.removeItem('@rsiData')
+  //   console.log("data removed")
+  // } catch(e) {
+  //   // remove error
+  // }
+  try {
+    const jsonValue = await AsyncStorage.getItem('@rsiData')
+    if(jsonValue === null) {
+      try {
+        var setData = {"data": data}
+        await AsyncStorage.setItem('@rsiData', JSON.stringify(setData))
+        console.log("data saved")
+      } catch (e) {
+        console.log(e)
+      }
+    }
+    else {
+      oldData = JSON.parse(jsonValue)
+      var concatData = []
+      // Copy Data
+      for(var i = 0; i < oldData["data"].length; i++) {
+        concatData.push(oldData["data"][i])
+      }
+
+      // Pushing Data
+      for(var i = 0; i < data.length; i++) {
+        var alreadyHas = false;
+        for(var j = 0; j < oldData["data"].length; j++) {
+          if(oldData["data"][j].legend[0] === data[i].legend[0]) {
+            alreadyHas = true;
+            console.log("already have " + data[i].legend[0])
+          }
+        }
+        if(!alreadyHas) {
+          console.log("Pushed " + data[i].legend[0])
+          concatData.push(data[i])
+        }
+      }
+
+      // Saving data
+      try {
+        var setData = {"data": data}
+        await AsyncStorage.setItem('@rsiData', JSON.stringify(setData))
+        console.log("data Saved")
+      } catch(e) {
+        // save error
+      }
+    }
+  } catch(e) {
+    console.log(e)
+  }
 }
 
 function StockSearch() {
@@ -159,7 +217,7 @@ function StockSearch() {
     setChartData(chartData)
   }
 
-  // Display Search Data for the user
+  // Display Multiple Search Data for the user
   const DisplaySearchData = (props) => {
     // If there is no data
     if(props.data === null) {
@@ -182,6 +240,7 @@ function StockSearch() {
     );
   }
 
+  // Display Multiple RSI graphs for user
   const DisplayMultipleGraphs = (props) => {
     var data = props.data
     var key = 0
@@ -213,6 +272,9 @@ function StockSearch() {
           </Button>
         </View>
         <DisplayMultipleGraphs data={chartData}/>
+        <View style={[{justifyContent:'space-between', marginBottom: 10}]}>
+          {chartData.length === 0 ? (null) : (<Button onPress={() => onSaveData(chartData)}>Save Data</Button>)}
+        </View>
       </ScrollView>
     </View>
     </>

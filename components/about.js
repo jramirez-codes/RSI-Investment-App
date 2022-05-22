@@ -3,7 +3,7 @@ import {Title} from "react-native-paper"
 
 function About() {
     return (
-        <Title>FAQ Page</Title>
+        <Title>FAQ Page Did this work</Title>
     );
 }
 
