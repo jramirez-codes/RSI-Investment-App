@@ -11,9 +11,9 @@ const SavedRoute = () => <SavedData/>;
 const MainContainer = () => {
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
-    { key: 'About', title: 'About', icon: "wall" },
-    { key: 'RSISearch', title: 'RSI Search', icon: "vpn" },
-    { key: 'Saved', title: 'Saved', icon: "volume-low" },
+    { key: 'About', title: 'About', icon: "help-box" },
+    { key: 'RSISearch', title: 'RSI Search', icon: "note-search" },
+    { key: 'Saved', title: 'Saved Data', icon: "file-document" },
   ]);
 
   const renderScene = BottomNavigation.SceneMap({
