@@ -75,14 +75,15 @@ function SavedData() {
 }
 
     return (
-      <View>
+      <View style={{backgroundColor: '#121212', height: "100%"}}>
         <ScrollView>
           <View style={[{justifyContent:'space-between', marginBottom: 10, alignSelf:"center"}]}>
-            <Title>Saved RSI Data</Title>
+            <Title style={{color: 'white'}}>Saved RSI Data</Title>
           </View>
           <DisplayCasheGraphs data={casheData}/>
           <View style={[{justifyContent:'space-between', marginBottom: 10}]}>
-            {casheData.length === 0 ? (null) : (<Button onPress={() => onClearDataPress()}>Clear Data</Button>)}
+            {casheData.length === 0 ? (null) : 
+            (<Button color={'#cf6679'} onPress={() => onClearDataPress()}>Clear Data</Button>)}
           </View>
         </ScrollView>
       </View>

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { Button, TextInput } from 'react-native-paper';
+import { Button, TextInput, Title} from 'react-native-paper';
 import {Dimensions, View, ScrollView} from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -255,14 +255,19 @@ function StockSearch() {
 
   return(
     <>
-    <View>
+    <View style={{backgroundColor: '#121212', height: '100%'}}>
       <ScrollView>
-        <View style={[{justifyContent:'space-between', marginBottom: 10}]}>
-          <TextInput label="TINKER Stock" value={inputStock} onChangeText={inputStock => onTextSearch(inputStock)} />
+        <View style={[{alignSelf:'center', marginBottom: 10}]}>
+          <Title style={{color: 'white'}}>RSI Search</Title>
+        </View>
+        <View style={[{alignSelf:'center', justifyContent:'space-between', marginBottom: 10, width: "90%"}]}>
+          <TextInput style={{backgroundColor: '#121212'}} mode='outlined' outlineColor='#bb86fc' selectionColor='#FFFFFF'
+          label="Inut Stock" value={inputStock} onChangeText={inputStock => onTextSearch(inputStock)} 
+          theme={{colors:{placeholder:'#bb86fc', text:'white'}}}/>
         </View>
         <DisplaySearchData data={stockSearch}/>
         <View style={[{justifyContent:'space-between', marginBottom: 10}]}>
-          <Button style={[{ width: "60%", alignSelf:"center"}]} mode="contained" onPress={() => onButtonPress(null)}>
+          <Button style={[{ width: "60%", alignSelf:"center", backgroundColor:"#bb86fc"}]} mode="contained" onPress={() => onButtonPress(null)}>
             Get RSI
           </Button>
         </View>
