@@ -1,9 +1,11 @@
 import React from 'react'
 import {Title} from "react-native-paper"
-
+import { View } from "react-native"
 function About() {
     return (
-        <Title>FAQ Page Did this work</Title>
+        <View style={{alignSelf:'center'}}>
+            <Title>About</Title>
+        </View>
     );
 }
 

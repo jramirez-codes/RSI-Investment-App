@@ -3,6 +3,7 @@ import { Title, Button } from 'react-native-paper';
 import {View, ScrollView, Dimensions} from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from '@react-navigation/native';
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -34,14 +35,14 @@ async function getCashedData() {
 
 function SavedData() {
     const [casheData, setCasheData] = useState([])
-
+    const isFocused = useIsFocused()
     useEffect(() => {
       const getData = async() => {
         var data = await getCashedData()
         setCasheData(data)
       }
       getData()
-    }, []);
+    }, [isFocused]);
 
     const onClearDataPress = async() => {
       console.log("Clear Data")

@@ -3,32 +3,18 @@ import { BottomNavigation } from 'react-native-paper';
 import About from './about.js';
 import StockSearch from './rsiStockSearch';
 import SavedData from './savedData.js';
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
-const AboutRoute = () => <About/>;
-const RSISearchRoute = () => <StockSearch/>;
-const SavedRoute = () => <SavedData/>;
+const Tab = createMaterialBottomTabNavigator();
 
-const MainContainer = () => {
-  const [index, setIndex] = React.useState(0);
-  const [routes] = React.useState([
-    { key: 'About', title: 'About', icon: "help-box" },
-    { key: 'RSISearch', title: 'RSI Search', icon: "note-search" },
-    { key: 'Saved', title: 'Saved Data', icon: "file-document" },
-  ]);
-
-  const renderScene = BottomNavigation.SceneMap({
-    About: AboutRoute,
-    RSISearch: RSISearchRoute,
-    Saved: SavedRoute,
-  });
-
+function MainContainer() {
   return (
-    <BottomNavigation
-      navigationState={{ index, routes }}
-      onIndexChange={setIndex}
-      renderScene={renderScene}
-    />
+    <Tab.Navigator>
+      <Tab.Screen name="About" component={About} />
+      <Tab.Screen name="RSI Search" component={StockSearch} />
+      <Tab.Screen name="Saved Data" component={SavedData} />
+    </Tab.Navigator>
   );
-};
+}
 
 export default MainContainer;

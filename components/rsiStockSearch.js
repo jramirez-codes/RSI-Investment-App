@@ -145,7 +145,7 @@ async function onSaveData(data) {
 
       // Saving data
       try {
-        var setData = {"data": data}
+        var setData = {"data": concatData}
         await AsyncStorage.setItem('@rsiData', JSON.stringify(setData))
         console.log("data Saved")
       } catch(e) {
@@ -268,7 +268,7 @@ function StockSearch() {
         </View>
         <DisplayMultipleGraphs data={chartData}/>
         <View style={[{justifyContent:'space-between', marginBottom: 10}]}>
-          {chartData.length === 0 ? (null) : (<Button onPress={() => onSaveData(chartData)}>Save Data</Button>)}
+          {chartData.length === 0 ? (null) : (<Button onPress={() => {onSaveData(chartData); setChartData([])}}>Save Data and Clear Searches</Button>)}
         </View>
       </ScrollView>
     </View>

@@ -1,5 +1,6 @@
 package com.rsiapp;
 
+import android.os.Bundle;
 // import com.oblador.vectoricons.VectorIconsPackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import android.app.Application;
@@ -61,6 +62,10 @@ public class MainApplication extends Application implements ReactApplication {
     SoLoader.init(this, /* native exopackage */ false);
     initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
   }
+  // @Override
+  // protected void onCreate(Bundle savedInstanceState) {
+  //   super.onCreate(null);
+  // }
 
   /**
    * Loads Flipper in React Native templates. Call this in the onCreate method with something like
