@@ -51,6 +51,6 @@ In the 'Search RSI' tab please input stock tinker in the box 'input stock'. If y
 ```
 
 ## Photo Examples
-![Display Stock Example](/images/RSI1.png)
-![Search Stock Example](/images/RSI2.png)
-![Display Data Example](/images/RSI3.png)
+![Display Stock Example](/photos/RSI1.png)
+![Search Stock Example](/photos/RSI2.png)
+![Display Data Example](/photos/RSI3.png)
