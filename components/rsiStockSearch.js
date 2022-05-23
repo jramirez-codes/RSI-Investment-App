@@ -108,16 +108,11 @@ async function augmentDataSearch(data) {
 }
 
 async function onSaveData(data) {
-  // try {
-  //   await AsyncStorage.removeItem('@rsiData')
-  //   console.log("data removed")
-  // } catch(e) {
-  //   // remove error
-  // }
   try {
     const jsonValue = await AsyncStorage.getItem('@rsiData')
     if(jsonValue === null) {
       try {
+        // Saving Data
         var setData = {"data": data}
         await AsyncStorage.setItem('@rsiData', JSON.stringify(setData))
         console.log("data saved")

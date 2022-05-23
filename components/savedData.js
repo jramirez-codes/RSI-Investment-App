@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Title, Button } from 'react-native-paper';
 import {View, ScrollView, Dimensions} from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
@@ -20,67 +20,72 @@ const chartConfig = {
 async function getCashedData() {
     var data = []
     try {
-        const value = await AsyncStorage.getItem('@rsiData')
-        if(value !== null) {
-          data = JSON.parse(value)["data"]
-        }
-      } catch(e) {
-        console.log("didn't get")
+      var value = await AsyncStorage.getItem('@rsiData')
+      if(value !== null) {
+        data = JSON.parse(value)["data"]
       }
-
+    } catch(e) {
+      console.log("didn't get")
+    }
     console.log("Got cashed data")
     console.log(data)
     return data
 }
 
-async function onButtonPress() {
-    await console.log("Button Pressed!")
-    await getCashedData()
+function SavedData() {
+    const [casheData, setCasheData] = useState([])
+
+    useEffect(() => {
+      const getData = async() => {
+        var data = await getCashedData()
+        setCasheData(data)
+      }
+      getData()
+    }, []);
+
+    const onClearDataPress = async() => {
+      console.log("Clear Data")
+      try {
+        await AsyncStorage.removeItem("@rsiData");
+        await setCasheData([]);
+      } catch(e) {
+        console.log(e);
+      }
+    }
+
+    // Display Multiple RSI graphs for user
+    const DisplayCasheGraphs = (props) => {   
+      var data = props.data
+
+      // If there is no chart data
+      if(data.length === 0) {
+        var allChartData =  (<View>{null}</View>)
+      }
+      else {
+        var key = 0
+        var allChartData = data.map((chartData) => (
+          <View key={key++} style={[{marginBottom: 10, borderRadius: 30, backgroundColor: "black", width:"90%", alignSelf:"center"}]}>
+            <LineChart data={chartData} width={screenWidth*0.9} height={250} chartConfig={chartConfig}  verticalLabelRotation={15} bezier/>
+          </View>
+        ));
+      }
+
+  return allChartData;
 }
 
-// Display Multiple RSI graphs for user
-const DisplayCasheGraphs = async(props) => {
-    var data = await props.data
-    var key = 0
-    // If there is no chart data
-    if(data.length === 0) {
-      return (<View>{null}</View>)
-    }
-    
-    const allChartData = await data.map((chartData) => (
-      <View key={key++} style={[{marginBottom: 10, borderRadius: 30, backgroundColor: "black", width:"90%", alignSelf:"center"}]}>
-        <LineChart data={chartData} width={screenWidth*0.9} height={250} chartConfig={chartConfig}  verticalLabelRotation={15} bezier/>
+    return (
+      <View>
+        <ScrollView>
+          <View style={[{justifyContent:'space-between', marginBottom: 10, alignSelf:"center"}]}>
+            <Title>Saved RSI Data</Title>
+          </View>
+          <DisplayCasheGraphs data={casheData}/>
+          <View style={[{justifyContent:'space-between', marginBottom: 10}]}>
+            {casheData.length === 0 ? (null) : (<Button onPress={() => onClearDataPress()}>Clear Data</Button>)}
+          </View>
+        </ScrollView>
       </View>
-    ));
-
-    return allChartData;
-}
-
-class SavedData extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            data: []
-        };
-    }
-    
-    componentDidMount() {
-        this.setState({
-            data: getCashedData()
-        });
-        console.log(this.state.data)
-    }
-    render() {
-        return (
-            <View>
-                <ScrollView>
-                    <Title>Saved RSI Data</Title>
-                    <Button mode="contained" onPress={onButtonPress}>Get cash</Button>
-                    <DisplayCasheGraphs data={this.state.data}/>
-                </ScrollView>
-            </View>
-        );
-    }
+    );
 }
 
 export default SavedData;

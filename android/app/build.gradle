@@ -77,7 +77,7 @@ import org.apache.tools.ant.taskdefs.condition.Os
  *   extraPackagerArgs: []
  * ]
  */
-
+// For Fonts
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 
 
