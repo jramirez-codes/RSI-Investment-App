@@ -17,8 +17,10 @@ const chartConfig = {
   useShadowColorFromDataset: false,
 };
 
+// Get tinker search data from alpha vantage
 async function getSearchData(keywords) {
-  var url = "https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords="+keywords+"&apikey=ZKAWVVN5WJRWFHD2"
+  var apiKey = await AsyncStorage.getItem('@alphaVantageApiKey')
+  var url = "https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords="+keywords+"&apikey=" + apiKey
   var data = await fetch(url)
   .then((response) => response.json())
   .then((json) => {
@@ -34,9 +36,10 @@ async function getSearchData(keywords) {
   return data;
 }
 
-// Get RSI data from alppha vantage
+// Get RSI data from alpha vantage
 async function getData(stock) {
-  var url = "https://www.alphavantage.co/query?function=RSI&symbol="+stock+"&interval=daily&time_period=10&series_type=open&apikey=ZKAWVVN5WJRWFHD2"
+  var apiKey = await AsyncStorage.getItem('@alphaVantageApiKey')
+  var url = "https://www.alphavantage.co/query?function=RSI&symbol="+stock+"&interval=daily&time_period=10&series_type=open&apikey="+apiKey
   var data = await fetch(url)
   .then((response) => response.json())
   .then((json) => {
@@ -162,6 +165,7 @@ function StockSearch() {
   const [inputStock, setInputStock] = useState("");
   const [stockSearch, setStockSearch] = useState(null)
   const [chartData, setChartData] = useState([]);
+  const [loadingButton, setLoadingButton] = useState(false)
 
   // When text is inputed into textInput
   const onTextSearch = async(searchText) => {
@@ -182,6 +186,9 @@ function StockSearch() {
 
   // When "Get RSI" Button is clicked
   const onButtonPress = async(stock) => {
+    // Change button to loading
+    setLoadingButton(true);
+
     var rsiData
     if(stock !== null) {
       // Update data and stock input if submitted
@@ -199,12 +206,7 @@ function StockSearch() {
     }
     // Transform data into useable form
     rsiData = await augmentDataRSI(rsiData)
-    // Copying Data
     var allData = []
-    for(var i = 0; i < chartData.length; i++) {
-      allData.push(chartData[i])
-    }
-
     // Pushing new data
     allData.push({
       labels: rsiData[0],
@@ -217,7 +219,14 @@ function StockSearch() {
       ],
       legend: [rsiData[2][0]]
     })
+    // Copying Old Data
+    for(var i = 0; i < chartData.length; i++) {
+      allData.push(chartData[i])
+    }
+
+    // Set data and loading button
     await setChartData(allData)
+    setLoadingButton(false)
   }
 
   // Display Multiple Search Data for the user
@@ -266,22 +275,24 @@ function StockSearch() {
     <View style={{backgroundColor: '#121212', height: '100%'}}>
       <ScrollView>
         <View style={[{alignSelf:'center', marginBottom: 10}]}>
-          <Title style={{color: 'white'}}>RSI Search</Title>
+          <Title style={{color: '#03dac6'}}>RSI Search</Title>
         </View>
         <View style={[{alignSelf:'center', justifyContent:'space-between', marginBottom: 10, width: "90%"}]}>
           <TextInput style={{backgroundColor: '#121212'}} mode='outlined' outlineColor='#bb86fc' selectionColor='#FFFFFF'
           label="Inut Stock" value={inputStock} onChangeText={inputStock => onTextSearch(inputStock)} 
-          theme={{colors:{placeholder:'#bb86fc', text:'white'}}}/>
+          theme={{colors:{placeholder:'#bb86fc', text:'white'}}} activeOutlineColor="#bb86fc"/>
         </View>
         <DisplaySearchData data={stockSearch}/>
         <View style={[{justifyContent:'space-between', marginBottom: 10}]}>
-          <Button style={[{ width: "60%", alignSelf:"center", backgroundColor:"#bb86fc"}]} mode="contained" onPress={() => onButtonPress(null)}>
+          <Button style={[{ width: "60%", alignSelf:"center", backgroundColor:"#bb86fc"}]} 
+          mode="contained" onPress={() => onButtonPress(null)} loading={loadingButton}>
             Get RSI
           </Button>
         </View>
         <DisplayMultipleGraphs data={chartData}/>
         <View style={[{justifyContent:'space-between', marginBottom: 10}]}>
-          {chartData.length === 0 ? (null) : (<Button onPress={() => {onSaveData(chartData); setChartData([])}}>Save Data and Clear Searches</Button>)}
+          {chartData.length === 0 ? (null) : 
+          (<Button color='#cf6679' onPress={() => {onSaveData(chartData); setChartData([])}}>Save Data and Clear Searches</Button>)}
         </View>
       </ScrollView>
     </View>

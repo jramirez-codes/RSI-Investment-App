@@ -4,12 +4,12 @@ import StockSearch from './rsiStockSearch';
 import SavedData from './savedData.js';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
+// '#bb86fc'
 const Tab = createMaterialBottomTabNavigator();
 
 function MainContainer() {
   return (
-    <Tab.Navigator initialRouteName="RSI Search" barStyle={{ backgroundColor: '#bb86fc' }}>
+    <Tab.Navigator initialRouteName="RSI Search" inactiveColor='#bb86fc' activeColor='#03dac6' barStyle={{ backgroundColor: '#121212' }}>
       <Tab.Screen name="About" component={About} options={{
           tabBarLabel: 'About',
           tabBarIcon: ({color}) => (

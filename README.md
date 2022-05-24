@@ -11,9 +11,10 @@ This application is an investment app that utilizes the relative strength index.
 In the 'Search RSI' tab please input stock tinker in the box 'input stock'. If you need help searching for the  stock, input more than 7 characters to get search results. Then click the get RSI button to get results. You can also clear your searchs and save the data at the bottom. To view saved data go to the 'Saved Data' tab. Lastly, to delete the saved data click the botton at the bottom of the saved data tab.
 
 ## Photo Examples
-![Display Stock Example](./photos/RSI1.PNG)
-![Search Stock Example](./photos/RSI2.PNG)
-![Display Data Example](./photos/RSI3.PNG)
+![Example 1](./photos/RSI1.PNG)
+![Example 2](./photos/RSI2.PNG)
+![Example 3](./photos/RSI3.PNG)
+![Example 4](./photos/RSI4.PNG)
 
 ## Limitations
 * Alpha Vantage limits API calls to 5 / per min.

@@ -78,7 +78,7 @@ function SavedData() {
       <View style={{backgroundColor: '#121212', height: "100%"}}>
         <ScrollView>
           <View style={[{justifyContent:'space-between', marginBottom: 10, alignSelf:"center"}]}>
-            <Title style={{color: 'white'}}>Saved RSI Data</Title>
+            <Title style={{color: '#03dac6'}}>Saved RSI Data</Title>
           </View>
           <DisplayCasheGraphs data={casheData}/>
           <View style={[{justifyContent:'space-between', marginBottom: 10}]}>
