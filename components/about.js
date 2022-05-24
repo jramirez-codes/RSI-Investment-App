@@ -19,7 +19,7 @@ function About() {
                             <Text style={{color: 'white'}}>
                             How to use: In the 'Search RSI' tab please input stock tinker in the box 'input stock'. 
                             If you need help searching for the  stock, input more than 7 characters to get search results.
-                            Then click the get RSI button to get results. You can also search your searchs and 
+                            Then click the get RSI button to get results. You can also clear your searchs and 
                             save the data at the bottom. Lastly to view saved data go to the 'Saved Data' tab.  
                             </Text>
                         </View>
