@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { Button, TextInput, Title} from 'react-native-paper';
 import {Dimensions, View, ScrollView} from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
@@ -121,7 +121,7 @@ async function onSaveData(data) {
       }
     }
     else {
-      oldData = JSON.parse(jsonValue)
+      var oldData = JSON.parse(jsonValue)
       var concatData = []
       // Copy Data
       for(var i = 0; i < oldData["data"].length; i++) {
@@ -190,7 +190,8 @@ function StockSearch() {
       setStockSearch(null)
     }else {
       rsiData = await onPress(inputStock)
-    } 
+    }
+    await setInputStock("");
 
     // Catches if reaquest is a not a valid
     if(Object.keys(rsiData).length === 0) {
@@ -198,7 +199,14 @@ function StockSearch() {
     }
     // Transform data into useable form
     rsiData = await augmentDataRSI(rsiData)
-    chartData.push({
+    // Copying Data
+    var allData = []
+    for(var i = 0; i < chartData.length; i++) {
+      allData.push(chartData[i])
+    }
+
+    // Pushing new data
+    allData.push({
       labels: rsiData[0],
       datasets: [
         { 
@@ -209,7 +217,7 @@ function StockSearch() {
       ],
       legend: [rsiData[2][0]]
     })
-    setChartData(chartData)
+    await setChartData(allData)
   }
 
   // Display Multiple Search Data for the user
@@ -222,7 +230,7 @@ function StockSearch() {
     // Update data
     var data = props.data
     var key = 0;
-    const searchedData = data.map((stock) =>(
+    var searchedData = data.map((stock) =>(
         <Button key={key++} style={[{alignSelf:"center"}]} mode="text" onPress={() => onButtonPress(stock[0])}>
           {stock[0] + " - " + stock[1]}
         </Button>
@@ -244,7 +252,7 @@ function StockSearch() {
       return (<View>{null}</View>)
     }
     
-    const allChartData = data.map((chartData) => (
+    var allChartData = data.map((chartData) => (
       <View key={key++} style={[{marginBottom: 10, borderRadius: 30, backgroundColor: "black", width:"90%", alignSelf:"center"}]}>
         <LineChart data={chartData} width={screenWidth*0.9} height={250} chartConfig={chartConfig}  verticalLabelRotation={15} bezier/>
       </View>

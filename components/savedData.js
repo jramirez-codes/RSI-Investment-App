@@ -71,8 +71,8 @@ function SavedData() {
         ));
       }
 
-  return allChartData;
-}
+      return allChartData;
+    }
 
     return (
       <View style={{backgroundColor: '#121212', height: "100%"}}>
