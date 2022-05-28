@@ -137,10 +137,11 @@ function SavedData() {
               </View>
               <View style={[{borderRadius: 50, overflow:'hidden'}]}>
                 <Button mode='contained' color="#03dac6" icon="reload" compact={true} onPress={() => onSingleUpdate(index)}/>
-              </View>
-               
+              </View>     
             </View>
-            <LineChart data={chartData} width={screenWidth*0.9} height={250} chartConfig={chartConfig}  verticalLabelRotation={15} bezier/>
+            <View style={{marginTop: -20}}>
+              <LineChart data={chartData} width={screenWidth*0.9} height={250} chartConfig={chartConfig}  verticalLabelRotation={15} bezier/>
+            </View>
           </View>
         ));
       }
