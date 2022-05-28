@@ -3,6 +3,9 @@ import { Button, TextInput, Title} from 'react-native-paper';
 import {Dimensions, View, ScrollView} from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import getData from './requests/getData';
+import augmentDataRSI from './requests/augmentDataRSI';
+import augmentDataSearch from './requests/augmentDataSearch';
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -36,25 +39,6 @@ async function getSearchData(keywords) {
   return data;
 }
 
-// Get RSI data from alpha vantage
-async function getData(stock) {
-  var apiKey = await AsyncStorage.getItem('@alphaVantageApiKey')
-  var url = "https://www.alphavantage.co/query?function=RSI&symbol="+stock+"&interval=daily&time_period=10&series_type=open&apikey="+apiKey
-  var data = await fetch(url)
-  .then((response) => response.json())
-  .then((json) => {
-    return json;
-  })
-  .then(data => {
-    return data;
-  })
-  .catch((error) => {
-    console.error(error);
-  });
-
-  return data;
-}
-
 // When Text input is changed
 async function onTextInput(input) {
   return await getSearchData(input)
@@ -69,45 +53,6 @@ async function onPress(stock) {
   console.log("Getting Data for " + stock);
   var data = await getData(stock);
   return data;
-}
-
-// Configure RSI data
-async function augmentDataRSI(data) {
-  // Variables
-  var metaJson = data["Meta Data"];
-  var rsiDataJson = data["Technical Analysis: RSI"];
-  var rsiNumb = 0;
-  
-  // Parse Meta Data
-  var metaData = []
-  for(var i in metaJson) {
-    metaData.push(metaJson[i])
-  }
-
-  // Parse RSI data
-  var rsiData = [];
-  var rsiLabels = [];
-  for(var i in rsiDataJson) {
-    rsiNumb = parseFloat(rsiDataJson[i]["RSI"]);
-    rsiData.push(parseFloat(rsiNumb));
-    rsiLabels.push(i)
-  }
-
-  // NOTE: I SET A HARD SET LIMIT TO 10 Entries for RSI DATA
-  rsiData = rsiData.slice(0,10).reverse()
-  rsiLabels = [rsiLabels[0], rsiLabels[2], rsiLabels[4], rsiLabels[6]].reverse()
-
-  return [rsiLabels, rsiData, metaData]
-}
-
-// Configure Search Data
-async function augmentDataSearch(data) {
-  var searchData = []
-  for(var x = 0; x < data.length; x++) {
-    searchData.push([data[x]["1. symbol"], data[x]["2. name"]])
-  }
-  // Return array of tuples with symbol and name
-  return searchData.slice(0,3);
 }
 
 async function onSaveData(data) {
