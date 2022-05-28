@@ -21,6 +21,10 @@ const chartConfig = {
 async function getCashedData() {
     var data = []
     try {
+      // For if data gets corrupted
+      // var setData = {"data": []}
+      // await AsyncStorage.setItem('@rsiData', JSON.stringify(setData) )
+  
       var value = await AsyncStorage.getItem('@rsiData')
       if(value !== null) {
         data = JSON.parse(value)["data"]
@@ -33,9 +37,11 @@ async function getCashedData() {
     return data
 }
 
+
 function SavedData() {
     const [casheData, setCasheData] = useState([])
     const isFocused = useIsFocused()
+
     useEffect(() => {
       const getData = async() => {
         var data = await getCashedData()
@@ -55,17 +61,40 @@ function SavedData() {
     }
 
     // Display Multiple RSI graphs for user
-    const DisplayCasheGraphs = (props) => {   
+    const DisplayCasheGraphs = (props) => {  
       var data = props.data
+      
+      // Deletes a data on button press
+      const onSingleDelete = async (key) => {
+        console.log("Deleting Item")
+        // Remove Data Point
+        var newData = []
+        for(var i = 0; i< data.length; i++) {
+          if(i !== key) {
+            await newData.push(data[i])
+          }
+        }
+        
+        // Update Cashe and rendered data
+        try {
+          setCasheData(newData)
+          var setData = {"data": newData}
+          await AsyncStorage.setItem('@rsiData', JSON.stringify(setData))
+        } catch(e) {
+          console.log(e);
+        }
+      }
 
       // If there is no chart data
       if(data.length === 0) {
         var allChartData =  (<View>{null}</View>)
       }
       else {
-        var key = 0
-        var allChartData = data.map((chartData) => (
-          <View key={key++} style={[{marginBottom: 10, borderRadius: 30, backgroundColor: "black", width:"90%", alignSelf:"center"}]}>
+        var allChartData = data.map((chartData, index) => (
+          <View key={index.toString()} style={[{marginBottom: 10, borderRadius: 30, backgroundColor: "black", width:"90%", alignSelf:"center"}]}>
+            <View style={[{width:"10%", alignSelf:'flex-end', borderRadius: 50, overflow:'hidden'}]}>
+              <Button mode='contained' color="#cf6679" icon="delete-forever" compact={true} onPress={() => onSingleDelete(index)}/>
+            </View>
             <LineChart data={chartData} width={screenWidth*0.9} height={250} chartConfig={chartConfig}  verticalLabelRotation={15} bezier/>
           </View>
         ));
